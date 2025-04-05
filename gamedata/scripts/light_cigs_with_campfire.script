@@ -14,14 +14,14 @@
 -- ---------------------------------------------------------------------------------------------------------------------
 
 -- Constants
-campfire_range                                   = 4        -- in meters
-message_duration                                 = 5        -- in seconds
+use_distance      = 4        -- in meters
+message_duration  = 5        -- in seconds
 
-script_to_patch                                  = enhanced_animations and "enhanced_animations" or "itms_manager"
-function_to_patch                                = enhanced_animations and "originalAOIBU" or "actor_on_item_before_use"
+script_to_patch   = enhanced_animations and "enhanced_animations" or "itms_manager"
+function_to_patch = enhanced_animations and "originalAOIBU" or "actor_on_item_before_use"
 
 -- Monkey-patches
-itms_manager_actor_on_item_before_use            = _G[script_to_patch][function_to_patch]
+itms_manager_actor_on_item_before_use = _G[script_to_patch][function_to_patch]
 
 -- ---------------------------------------------------------------------------------------------------------------------
 -- General Functions
@@ -47,16 +47,35 @@ _G[script_to_patch][function_to_patch] = function(obj, flags)
         return
     end
 
-    -- Get campfire game_object & class
-    local campfire_obj = bind_campfire.get_nearby_campfire(campfire_range, false)
-    local campfire = campfire_obj and campfire_obj:get_campfire()
+    if can_light_cigarette() then
+        printf("[LCWC] Light Cigarette - Using campfire or burner stove to light cigarette")
 
-    -- If there is a campfire turned on nearby, allow use of cig
-    if campfire and campfire:is_on() then
         -- Override "missing tool" message
         actor_menu.set_msg(1, "", 5)
 
         -- Allow action
         flags.ret_value = true
     end
+end
+
+function can_light_cigarette()
+    -- Get campfire game_object & class
+    local campfire_obj = bind_campfire.get_nearby_campfire(use_distance, false)
+    local campfire = campfire_obj and campfire_obj:get_campfire()
+
+    -- If there is a campfire turned on nearby, allow use of cig
+    if campfire and campfire:is_on() then
+        return true
+    end
+
+    -- Check if player is near burner anomaly in stove (Army Warehouses
+    local near_burner_stove = false
+    level.iterate_nearest(db.actor:position(), use_distance, function(obj)
+        if level.name() == "l07_military" and obj:name() == "mil_zone_zharka_static_strong_0003" then
+            near_burner_stove = true
+            return true
+        end
+    end)
+
+    return near_burner_stove
 end

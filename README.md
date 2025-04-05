@@ -1,4 +1,4 @@
-# LIGHT CIGS WITH CAMPFIRES [![License](https://licensebuttons.net/l/by-nc-sa/4.0/88x31.png)](https://creativecommons.org/licenses/by-nc-sa/4.0/)
+# LIGHT CIGS WITH CAMPFIRE [![License](https://licensebuttons.net/l/by-nc-sa/4.0/88x31.png)](https://creativecommons.org/licenses/by-nc-sa/4.0/)
 
 [![Latest Stable Build](https://img.shields.io/github/v/release/nltp-ashes/Light-Cigs-With-Campfire?label=Latest%20Stable%20Build&color=brightgreen)](https://github.com/nltp-ashes/Light-Cigs-With-Campfire/releases/latest) [![Latest Test Build](https://img.shields.io/github/v/release/nltp-ashes/Light-Cigs-With-Campfire?include_prereleases&filter=*rc*&display_name=tag&label=Latest%20Test%20Build&color=yellow)]() [![Total Downloads](https://img.shields.io/github/downloads/nltp-ashes/Light-Cigs-With-Campfire/total.svg?label=Downloads%20(All%20Time))](https://github.com/nltp-ashes/Light-Cigs-With-Campfire/releases) [![Latest Release Downloads](https://img.shields.io/github/downloads/nltp-ashes/Light-Cigs-With-Campfire/latest/total.svg?label=Downloads%20(Latest%20Release))](https://github.com/nltp-ashes/Light-Cigs-With-Campfire/releases/latest)
 
@@ -10,7 +10,9 @@ Simple mod that allows the player to light cigarettes when standing near a lit c
 
 ### ABOUT
 
-A simple mod that allows the player to light cigarettes when standing near a lit campfire. If other addons add new tools to light cigarettes, the order in which tools is semi-random. If the player has matches, these will always be used first.
+A simple mod that allows the player to light cigarettes when standing near a lit campfire. It also allows the burner anomaly in the stove, at the Army Warehouses to light cigarettes.
+
+If other addons add new tools to light cigarettes, the order in which tools is semi-random. If the player has matches, these will always be used first.
 
 ---
 
@@ -72,9 +74,10 @@ If you need help with anything, or if you have any suggestions, you can :
 
 Special thanks to these people for their help in the making of this addon :
 
-|        Name        |    Motive    |
-|:------------------:|:------------:|
-| **solidsnake1278** | For the idea |
+|        Name        |                                          Motive                                           |
+|:------------------:|:-----------------------------------------------------------------------------------------:|
+|   **twovipers**    | For the suggestion to make the burner anomaly in the stove viable for lighting cigarettes |
+| **solidsnake1278** |                                   For the original idea                                   |
 
 ---
 
