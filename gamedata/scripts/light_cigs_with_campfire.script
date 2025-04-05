@@ -1,0 +1,62 @@
+---==================================================================================================================---
+---                                                                                                                  ---
+---    Original Author(s) : NLTP_ASHES                                                                               ---
+---    Edited : N/A                                                                                                  ---
+---    Date : 05/04/2025                                                                                             ---
+---    License : Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA 4.0)           ---
+---                                                                                                                  ---
+---    Script used allow the player to light cigarettes with campfires that are turned on.                           ---
+---                                                                                                                  ---
+---==================================================================================================================---
+
+-- ---------------------------------------------------------------------------------------------------------------------
+-- Constants, and monkey-patches
+-- ---------------------------------------------------------------------------------------------------------------------
+
+-- Constants
+campfire_range                                   = 4        -- in meters
+message_duration                                 = 5        -- in seconds
+
+script_to_patch                                  = enhanced_animations and "enhanced_animations" or "itms_manager"
+function_to_patch                                = enhanced_animations and "originalAOIBU" or "actor_on_item_before_use"
+
+-- Monkey-patches
+itms_manager_actor_on_item_before_use            = _G[script_to_patch][function_to_patch]
+
+-- ---------------------------------------------------------------------------------------------------------------------
+-- General Functions
+-- ---------------------------------------------------------------------------------------------------------------------
+
+_G[script_to_patch][function_to_patch] = function(obj, flags)
+    -- Call original actor_on_item_before_use function
+    itms_manager_actor_on_item_before_use(obj, flags)
+
+    -- Get required tool (if any)
+    local require_tool = ini_sys:r_string_ex(obj:section(), "required_tool")
+    local obj_tool = require_tool and ini_sys:section_exist(require_tool) and db.actor:object(require_tool)
+
+    -- Return if no tool is required, or if player already has a tool
+    if not require_tool or obj_tool then
+        printf("[LCWC] Light Cigarette - Object requires no tool or player has necessary tool already")
+        return
+    end
+
+    -- Return if action was already allowed
+    if flags.ret_value then
+        printf("[LCWC] Light Cigarette - Action was already allowed")
+        return
+    end
+
+    -- Get campfire game_object & class
+    local campfire_obj = bind_campfire.get_nearby_campfire(campfire_range, false)
+    local campfire = campfire_obj and campfire_obj:get_campfire()
+
+    -- If there is a campfire turned on nearby, allow use of cig
+    if campfire and campfire:is_on() then
+        -- Override "missing tool" message
+        actor_menu.set_msg(1, "", 5)
+
+        -- Allow action
+        flags.ret_value = true
+    end
+end
