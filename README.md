@@ -76,6 +76,7 @@ Special thanks to these people for their help in the making of this addon :
 
 |        Name        |                                          Motive                                           |
 |:------------------:|:-----------------------------------------------------------------------------------------:|
+|     **tosox**      |                        For some small code improvement suggestions                        |
 |   **twovipers**    | For the suggestion to make the burner anomaly in the stove viable for lighting cigarettes |
 | **solidsnake1278** |                                   For the original idea                                   |
 

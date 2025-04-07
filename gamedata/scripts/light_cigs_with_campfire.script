@@ -2,10 +2,11 @@
 ---                                                                                                                  ---
 ---    Original Author(s) : NLTP_ASHES                                                                               ---
 ---    Edited : N/A                                                                                                  ---
----    Date : 05/04/2025                                                                                             ---
+---    Date : 07/04/2025                                                                                             ---
 ---    License : Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA 4.0)           ---
 ---                                                                                                                  ---
----    Script used allow the player to light cigarettes with campfires that are turned on.                           ---
+---    Script used give alternative ways to light cigarettes for the player.                                         ---
+---    Player can now light cigarettes when near a lit campfire, or where near the burner anomaly in the stove (AW). ---
 ---                                                                                                                  ---
 ---==================================================================================================================---
 
@@ -14,11 +15,14 @@
 -- ---------------------------------------------------------------------------------------------------------------------
 
 -- Constants
-use_distance      = 4        -- in meters
-message_duration  = 5        -- in seconds
+use_distance         = 4        -- in meters
+message_duration     = 5        -- in seconds
+override_msg         = ""       -- Empty message to override "missing tool"
+aw_level_name        = "l07_military"
+burner_anomaly_name  = "mil_zone_zharka_static_strong_0003"
 
-script_to_patch   = enhanced_animations and "enhanced_animations" or "itms_manager"
-function_to_patch = enhanced_animations and "originalAOIBU" or "actor_on_item_before_use"
+script_to_patch      = enhanced_animations and "enhanced_animations" or "itms_manager"
+function_to_patch    = enhanced_animations and "originalAOIBU" or "actor_on_item_before_use"
 
 -- Monkey-patches
 itms_manager_actor_on_item_before_use = _G[script_to_patch][function_to_patch]
@@ -51,7 +55,7 @@ _G[script_to_patch][function_to_patch] = function(obj, flags)
         printf("[LCWC] Light Cigarette - Using campfire or burner stove to light cigarette")
 
         -- Override "missing tool" message
-        actor_menu.set_msg(1, "", 5)
+        actor_menu.set_msg(1, override_msg, 5)
 
         -- Allow action
         flags.ret_value = true
@@ -68,10 +72,15 @@ function can_light_cigarette()
         return true
     end
 
-    -- Check if player is near burner anomaly in stove (Army Warehouses
+    -- If player is not in the Army Warehouses level, no more options to light the cig
+    if level.name() ~= aw_level_name then
+        return false
+    end
+
+    -- Player is in AW, so check proximity to burner anomaly in stove
     local near_burner_stove = false
     level.iterate_nearest(db.actor:position(), use_distance, function(obj)
-        if level.name() == "l07_military" and obj:name() == "mil_zone_zharka_static_strong_0003" then
+        if obj:name() == burner_anomaly_name then
             near_burner_stove = true
             return true
         end
